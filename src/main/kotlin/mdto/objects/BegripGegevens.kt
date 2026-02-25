@@ -8,6 +8,6 @@ package nl.joozd.mdto.objects
  */
 data class BegripGegevens(
     val begripLabel: String,
-    val begripCode: String?,
+    val begripCode: String? = null,
     val begripBegrippenlijst: VerwijzingGegevens
 ): MDTONode

@@ -11,4 +11,6 @@ fun BeperkingGebruikGegevens.emit(name: String, writer: XMLStreamWriter) {
         node.emit("beperkingGebruikDocumentatie", writer)
     }
     beperkingGebruikTermijn?.emit("beperkingGebruikTermijn", writer)
+
+    writer.writeEndElement()
 }

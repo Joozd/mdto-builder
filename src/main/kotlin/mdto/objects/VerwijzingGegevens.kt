@@ -6,5 +6,5 @@ package nl.joozd.mdto.objects
  */
 data class VerwijzingGegevens(
     val verwijzingNaam: String,
-    val verwijzingIdentificatie: IdentificatieGegevens?
+    val verwijzingIdentificatie: IdentificatieGegevens? = null
 ): MDTONode

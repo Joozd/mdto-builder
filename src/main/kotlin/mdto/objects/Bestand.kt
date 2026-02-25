@@ -16,7 +16,7 @@ import java.net.URI
 data class Bestand(
     override val identificatie: List<IdentificatieGegevens>,
     override val naam: String,
-    val omvang: Int,
+    val omvang: Long,
     val bestandsformaat: BegripGegevens,
     val checksum: List<ChecksumGegevens>,
     val urlBestand: URI? = null,
@@ -25,7 +25,7 @@ data class Bestand(
 
     init {
         require(identificatie.isNotEmpty()) {
-            "Bestand moet minimaal één identificatie bevatten."
+            "Bestand moet minimaal één identificatie bevatten. Naam is $naam"
         }
         require(checksum.isNotEmpty()) {
             "Bestand moet minimaal één checksum bevatten."

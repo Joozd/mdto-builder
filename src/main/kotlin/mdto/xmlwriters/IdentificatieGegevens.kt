@@ -12,7 +12,6 @@ internal fun IdentificatieGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.element( "identificatieKenmerk",identificatieKenmerk)
 
     writer.element("identificatieBron",identificatieBron)
-    writer.writeEndElement()
 
     writer.writeEndElement()
 }

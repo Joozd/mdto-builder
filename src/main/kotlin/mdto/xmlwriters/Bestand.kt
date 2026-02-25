@@ -13,7 +13,6 @@ fun Bestand.emit(name: String, writer: XMLStreamWriter) {
 
     // naam (verplicht vanuit base)
     writer.element("naam",naam)
-    writer.writeEndElement()
 
     // omvang (verplicht)
     writer.element("omvang",omvang.toString())
