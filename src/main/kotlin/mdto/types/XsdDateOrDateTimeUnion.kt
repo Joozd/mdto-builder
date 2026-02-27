@@ -5,6 +5,7 @@ import java.time.OffsetDateTime
 import java.time.Year
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime as JavaLDT
 
 sealed interface XsdDateOrDateTimeUnion {
 
@@ -12,6 +13,7 @@ sealed interface XsdDateOrDateTimeUnion {
     data class YearMonthOnly(val value: YearMonth) : XsdDateOrDateTimeUnion
     data class FullDate(val value: LocalDate) : XsdDateOrDateTimeUnion
     data class DateTime(val value: OffsetDateTime) : XsdDateOrDateTimeUnion
+    data class LocalDateTime(val value: JavaLDT) : XsdDateOrDateTimeUnion
 
     companion object {
 
@@ -21,8 +23,8 @@ sealed interface XsdDateOrDateTimeUnion {
 
             // 1. dateTime (heeft altijd 'T')
             if (text.contains('T')) {
-                return runCatching { OffsetDateTime.parse(text) }
-                    .map{ DateTime(it) }
+                return runCatching { DateTime(OffsetDateTime.parse(text)) }
+                    .recoverCatching { LocalDateTime(JavaLDT.parse(text)) }
                     .getOrElse {
                         throw IllegalArgumentException(
                             "Ongeldige xsd:dateTime waarde: $text"
@@ -63,4 +65,7 @@ fun XsdDateOrDateTimeUnion.toXmlString(): String =
 
         is XsdDateOrDateTimeUnion.DateTime ->
             value.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+
+        is XsdDateOrDateTimeUnion.LocalDateTime ->
+            value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
     }

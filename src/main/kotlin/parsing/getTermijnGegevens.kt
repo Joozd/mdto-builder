@@ -6,10 +6,10 @@ import nl.joozd.mdto.types.XsdDateUnion
 import nl.joozd.mdto.types.XsdDuration
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import java.time.LocalDate
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val TERMIJN_TRIGGER_START_LOOPTIJD_TAG = "termijnTriggerStartLooptijd"
 private const val TERMIJN_STARTDATUM_LOOPTIJD_TAG = "termijnStartdatumLooptijd"
@@ -34,7 +34,7 @@ internal fun getTermijnGegevens(
 ): TermijnGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var termijnTriggerStartLooptijd: BegripGegevens? = null
     var termijnStartdatumLooptijd: LocalDate? = null
@@ -42,7 +42,12 @@ internal fun getTermijnGegevens(
     var termijnEinddatum: XsdDateUnion? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
 

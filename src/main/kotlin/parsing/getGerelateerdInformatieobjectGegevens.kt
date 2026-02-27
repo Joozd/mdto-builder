@@ -4,9 +4,9 @@ import nl.joozd.mdto.objects.BegripGegevens
 import nl.joozd.mdto.objects.GerelateerdInformatieobjectGegevens
 import nl.joozd.mdto.objects.VerwijzingGegevens
 import nl.joozd.utils.isEndEventFor
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val GERELATEERD_INFORMATIEOBJECT_VERWIJZING_TAG =
     "gerelateerdInformatieobjectVerwijzing"
@@ -29,13 +29,18 @@ internal fun getGerelateerdInformatieobjectGegevens(
 ): GerelateerdInformatieobjectGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var gerelateerdInformatieobjectVerwijzing: VerwijzingGegevens? = null
     var gerelateerdInformatieobjectTypeRelatie: BegripGegevens? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
 

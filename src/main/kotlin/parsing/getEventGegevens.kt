@@ -6,9 +6,9 @@ import nl.joozd.mdto.objects.VerwijzingGegevens
 import nl.joozd.mdto.types.XsdDateOrDateTimeUnion
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val EVENT_TYPE_TAG = "eventType"
 private const val EVENT_TIJD_TAG = "eventTijd"
@@ -35,7 +35,7 @@ internal fun getEventGegevens(
 ): EventGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var eventType: BegripGegevens? = null
     var eventTijd: XsdDateOrDateTimeUnion? = null
@@ -43,7 +43,12 @@ internal fun getEventGegevens(
     var eventResultaat: String? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
 

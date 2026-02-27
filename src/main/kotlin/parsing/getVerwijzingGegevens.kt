@@ -4,10 +4,10 @@ import nl.joozd.mdto.objects.IdentificatieGegevens
 import nl.joozd.mdto.objects.VerwijzingGegevens
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val VERWIJZING_NAAM_TAG = "verwijzingNaam"
 private const val VERWIJZING_IDENTIFICATIE_TAG = "verwijzingIdentificatie"
@@ -43,13 +43,18 @@ internal fun getVerwijzingGegevens(
 ): VerwijzingGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var naam: String? = null
     var identificatie: IdentificatieGegevens? = null // optional
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
             VERWIJZING_NAAM_TAG ->

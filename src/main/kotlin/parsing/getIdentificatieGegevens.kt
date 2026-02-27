@@ -3,10 +3,10 @@ package nl.joozd.parsing
 import nl.joozd.mdto.objects.IdentificatieGegevens
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val IDENTIFICATIE_KENMERK_TAG = "identificatieKenmerk"
 private const val IDENTIFICATIE_BRON_TAG = "identificatieBron"
@@ -42,13 +42,18 @@ internal fun getIdentificatieGegevens(
 ): IdentificatieGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var kenmerk: String? = null
     var bron: String? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
             IDENTIFICATIE_KENMERK_TAG ->

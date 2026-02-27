@@ -1,20 +1,14 @@
 package nl.joozd.parsing
 
-import nl.joozd.mdto.objects.BegripGegevens
-import nl.joozd.mdto.objects.BeperkingGebruikGegevens
-import nl.joozd.mdto.objects.BetrokkeneGegevens
-import nl.joozd.mdto.objects.DekkingInTijdGegevens
-import nl.joozd.mdto.objects.EventGegevens
-import nl.joozd.mdto.objects.GerelateerdInformatieobjectGegevens
-import nl.joozd.mdto.objects.Informatieobject
-import nl.joozd.mdto.objects.RaadpleeglocatieGegevens
-import nl.joozd.mdto.objects.TermijnGegevens
-import nl.joozd.mdto.objects.VerwijzingGegevens
+import nl.joozd.mdto.objects.*
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
+
+private const val IDENTIFICATIE_TAG = "identificatie"
+private const val NAAM_TAG = "naam"
 
 internal fun getInformatieobject(
     reader: XMLEventReader,
@@ -24,7 +18,8 @@ internal fun getInformatieobject(
     val startEventName = startEvent.name
 
     // --- base ---
-    val base = readObjectTypeBase(reader, startEventName)
+    val identificaties = mutableListOf<IdentificatieGegevens>()
+    var naam: String? = null
 
     // --- extension ---
     var aggregatieniveau: BegripGegevens? = null
@@ -52,11 +47,21 @@ internal fun getInformatieobject(
     var activiteit: VerwijzingGegevens? = null
     val beperkingenGebruik = mutableListOf<BeperkingGebruikGegevens>()
 
-    var currentEvent = reader.requireNextTagAsStartElement()
+    var currentEvent: XMLEvent = startEvent
 
-    while (!currentEvent.isEndEventFor(startEventName)) {
-
+    while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
+        println("currentEvent: $currentEvent")
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
         when (currentEvent.name.localPart) {
+            IDENTIFICATIE_TAG ->
+                identificaties += getIdentificatieGegevens(reader, currentEvent)
+
+            NAAM_TAG -> naam = reader.readSimpleElementText(currentEvent)
 
             "aggregatieniveau" ->
                 aggregatieniveau = getBegripGegevens(reader, currentEvent)
@@ -121,11 +126,10 @@ internal fun getInformatieobject(
             "beperkingGebruik" ->
                 beperkingenGebruik += getBeperkingGebruikGegevens(reader, currentEvent)
         }
-
-        currentEvent = reader.requireNextTagAsStartElement()
     }
 
-    if (waardering == null ||
+    if (naam == null ||
+        waardering == null ||
         archiefvormers.isEmpty() ||
         beperkingenGebruik.isEmpty()
     ) {
@@ -135,8 +139,8 @@ internal fun getInformatieobject(
     }
 
     return Informatieobject(
-        identificatie = base.identificaties,
-        naam = base.naam,
+        identificatie = identificaties,
+        naam = naam,
         aggregatieniveau = aggregatieniveau,
         classificatie = classificaties,
         trefwoord = trefwoorden,

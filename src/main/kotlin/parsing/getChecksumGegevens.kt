@@ -4,11 +4,13 @@ import nl.joozd.mdto.objects.BegripGegevens
 import nl.joozd.mdto.objects.ChecksumGegevens
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val CHECKSUM_ALGORITME_TAG = "checksumAlgoritme"
 private const val CHECKSUM_WAARDE_TAG = "checksumWaarde"
@@ -45,21 +47,30 @@ internal fun getChecksumGegevens(
     startEvent: StartElement,
 ): ChecksumGegevens {
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var algoritme: BegripGegevens? = null
     var waarde: String? = null
     var datum: OffsetDateTime? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
+
 
         when (currentEvent.name.localPart) {
             CHECKSUM_ALGORITME_TAG -> algoritme = getBegripGegevens(reader, currentEvent)
             CHECKSUM_WAARDE_TAG -> waarde = reader.readSimpleElementText(currentEvent)
             CHECKSUM_DATUM_TAG -> {
                 val datumText = reader.readSimpleElementText(currentEvent)
-                datum = OffsetDateTime.parse(datumText)
+                datum = runCatching { OffsetDateTime.parse(datumText) }
+                    .recoverCatching { LocalDateTime.parse(datumText).atOffset(ZoneOffset.UTC) }
+                    .getOrThrow()
+
             } // consume and discard
         }
     }

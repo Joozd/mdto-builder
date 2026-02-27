@@ -6,9 +6,9 @@ import nl.joozd.mdto.objects.TermijnGegevens
 import nl.joozd.mdto.objects.VerwijzingGegevens
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val BEPERKING_GEBRUIK_TYPE_TAG = "beperkingGebruikType"
 private const val BEPERKING_GEBRUIK_NADERE_BESCHRIJVING_TAG = "beperkingGebruikNadereBeschrijving"
@@ -35,7 +35,7 @@ internal fun getBeperkingGebruikGegevens(
 ): BeperkingGebruikGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var beperkingGebruikType: BegripGegevens? = null
     var beperkingGebruikNadereBeschrijving: String? = null
@@ -43,7 +43,12 @@ internal fun getBeperkingGebruikGegevens(
     var beperkingGebruikTermijn: TermijnGegevens? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
 

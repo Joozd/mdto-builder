@@ -1,16 +1,15 @@
 package nl.joozd.parsing
 
-import nl.joozd.mdto.objects.BegripGegevens
-import nl.joozd.mdto.objects.Bestand
-import nl.joozd.mdto.objects.ChecksumGegevens
-import nl.joozd.mdto.objects.VerwijzingGegevens
+import nl.joozd.mdto.objects.*
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import java.net.URI
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
+private const val IDENTIFICATIE_TAG = "identificatie"
+private const val NAAM_TAG = "naam"
 private const val OMVANG_TAG = "omvang"
 private const val BESTANDSFORMAAT_TAG = "bestandsformaat"
 private const val CHECKSUM_TAG = "checksum"
@@ -37,22 +36,35 @@ internal fun getBestand(
     startEvent: StartElement,
 ): Bestand {
 
+
     val startEventName = startEvent.name
 
     // --- base ---
-    val base = readObjectTypeBase(reader, startEventName)
+    val identificaties = mutableListOf<IdentificatieGegevens>()
+    var naam: String? = null
 
     // --- extension ---
+
     var omvang: Long? = null
     var bestandsformaat: BegripGegevens? = null
     val checksum = mutableListOf<ChecksumGegevens>()
     var URLBestand: URI? = null
     var isRepresentatieVan: VerwijzingGegevens? = null
 
-    var currentEvent = reader.requireNextTagAsStartElement()
+    var currentEvent: XMLEvent = startEvent
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
         when (currentEvent.name.localPart) {
+            IDENTIFICATIE_TAG ->
+                identificaties += getIdentificatieGegevens(reader, currentEvent)
+
+            NAAM_TAG -> naam = reader.readSimpleElementText(currentEvent)
 
             OMVANG_TAG -> {
                 val text = reader.readSimpleElementText(currentEvent)
@@ -73,11 +85,10 @@ internal fun getBestand(
             IS_REPRESENTATIE_VAN_TAG ->
                 isRepresentatieVan = getVerwijzingGegevens(reader, currentEvent)
         }
-
-        currentEvent = reader.requireNextTagAsStartElement()
     }
 
-    if (omvang == null ||
+    if (naam == null ||
+        omvang == null ||
         bestandsformaat == null ||
         checksum.isEmpty() ||
         isRepresentatieVan == null
@@ -88,8 +99,8 @@ internal fun getBestand(
     }
 
     return Bestand(
-        identificatie = base.identificaties,
-        naam = base.naam,
+        identificatie = identificaties,
+        naam = naam,
         omvang = omvang,
         bestandsformaat = bestandsformaat,
         checksum = checksum,

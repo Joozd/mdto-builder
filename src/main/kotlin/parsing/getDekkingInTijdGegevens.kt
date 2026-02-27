@@ -5,9 +5,9 @@ import nl.joozd.mdto.objects.DekkingInTijdGegevens
 import nl.joozd.mdto.types.XsdDateUnion
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val DEKKING_IN_TIJD_TYPE_TAG = "dekkingInTijdType"
 private const val DEKKING_IN_TIJD_BEGINDATUM_TAG = "dekkingInTijdBegindatum"
@@ -32,14 +32,19 @@ internal fun getDekkingInTijdGegevens(
 ): DekkingInTijdGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     var dekkingInTijdType: BegripGegevens? = null
     var dekkingInTijdBegindatum: XsdDateUnion? = null
     var dekkingInTijdEinddatum: XsdDateUnion? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
 

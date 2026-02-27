@@ -4,10 +4,10 @@ import nl.joozd.mdto.objects.BegripGegevens
 import nl.joozd.mdto.objects.VerwijzingGegevens
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val BEGRIP_LABEL_TAG = "begripLabel"
 private const val BEGRIP_CODE_TAG = "begripCode"
@@ -42,13 +42,20 @@ private const val BEGRIP_BEGRIPPENLIJST_TAG = "begripBegrippenlijst"
  */
 internal fun getBegripGegevens(reader: XMLEventReader, startEvent: StartElement): BegripGegevens {
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
+
     var label: String? = null
     var code: String? = null // optional
     var begrippenLijst: VerwijzingGegevens? = null
 
     while(reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement() // This should be a startEvent. Any other events are handles by sub functions
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
+
         /*
          * 3 smaken hier, zouden in deze volgorde langs moeten komen:
          * - begripLabel (String)

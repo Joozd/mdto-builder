@@ -4,10 +4,10 @@ import nl.joozd.mdto.objects.RaadpleeglocatieGegevens
 import nl.joozd.mdto.objects.VerwijzingGegevens
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import nl.joozd.utils.requireNextTagAsStartElement
 import java.net.URI
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.events.StartElement
+import javax.xml.stream.events.XMLEvent
 
 private const val RAADPLEEGLOCATIE_FYSIEK_TAG = "raadpleeglocatieFysiek"
 private const val RAADPLEEGLOCATIE_ONLINE_TAG = "raadpleeglocatieOnline"
@@ -24,13 +24,18 @@ fun getRaadpleeglocatieGegevens(
 ): RaadpleeglocatieGegevens {
 
     val startEventName = startEvent.name
-    var currentEvent: StartElement = startEvent
+    var currentEvent: XMLEvent = startEvent
 
     val raadpleeglocatieFysiek = mutableListOf<VerwijzingGegevens>()
     val raadpleeglocatieOnline = mutableListOf<URI>()
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        currentEvent = reader.requireNextTagAsStartElement()
+        val nextEvent = reader.nextTag()
+        if(nextEvent.isEndElement) {
+            currentEvent = nextEvent
+            continue
+        }
+        currentEvent = nextEvent.asStartElement()
 
         when (currentEvent.name.localPart) {
 
