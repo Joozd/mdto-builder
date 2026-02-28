@@ -1,4 +1,3 @@
 package nl.joozd.mdto.objects
 
-sealed interface MdtoContent: MDTOObject {
-}
+sealed interface MdtoContent: MDTOObject

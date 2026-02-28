@@ -51,21 +51,14 @@ dependencies {
 ### Parse an MDTO file
 
 ```kotlin
-val root: MDTORoot = parseMdto(pathToXml)
+val mdtoContent: MdtoContent = parseMdto(pathToXml)
 ```
 
-The result contains:
-
-```kotlin
-data class MDTORoot(
-    val content: MdtoBaseClassContent
-)
-```
-
-Where `content` is either:
-
+The result contains either (depending on the type of MDTO file)`:
 - `Informatieobject`
 - `Bestand`
+
+These classes implement `sealed interface MdtoContent`, so they can conveniently be used in a `when` block.
 
 Both map directly to the MDTO XSD.
 
@@ -78,6 +71,11 @@ val root: MDTORoot = validateMdtoXml(pathToXml)
 This will verify an XML file against the curently supported MDTO XSD (MDTO-XML1.0.1.xsd). It will throw an exception if the validation failed, or do nothing if it was successful.
 
 ---
+
+### Get an XML String from an Informatieobject or Bestand object
+```kotlin
+val xmlString: String = mdtoContent.xmlString()
+```
 
 
 
@@ -114,6 +112,10 @@ MDTOBuilder is licensed under the **Joozd Public Use License (JPUL) v1.0**:
   - Inclusion in paid/commercial software, including (but not limited to) SaaS products.
   - Redistribution as part of commercial SaaS or licensed products  
   - Resale or sublicensing  
+
+What this basically means: If you want to use this to get things done for yourself, or at work: Go right ahead. 
+
+If you make money from selling software products, I will probably want to get paid for my work, just like you do. 
 
 For licensing inquiries: contact the repository owner.
 
