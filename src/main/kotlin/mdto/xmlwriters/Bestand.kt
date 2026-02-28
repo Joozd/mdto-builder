@@ -26,7 +26,7 @@ fun Bestand.emit(name: String, writer: XMLStreamWriter) {
     }
 
     // urlBestand (0..1)
-    writer.element("urlBestand",urlBestand?.toString())
+    writer.element("URLBestand",urlBestand?.toString())
 
 
     // isRepresentatieVan (verplicht)

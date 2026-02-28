@@ -2,11 +2,9 @@ package nl.joozd.parsing
 
 import nl.joozd.mdto.objects.BegripGegevens
 import nl.joozd.mdto.objects.ChecksumGegevens
+import nl.joozd.mdto.types.XsdDateTimeUnion
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.readSimpleElementText
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.events.StartElement
@@ -51,7 +49,7 @@ internal fun getChecksumGegevens(
 
     var algoritme: BegripGegevens? = null
     var waarde: String? = null
-    var datum: OffsetDateTime? = null
+    var datum: XsdDateTimeUnion? = null
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
         val nextEvent = reader.nextTag()
@@ -67,9 +65,8 @@ internal fun getChecksumGegevens(
             CHECKSUM_WAARDE_TAG -> waarde = reader.readSimpleElementText(currentEvent)
             CHECKSUM_DATUM_TAG -> {
                 val datumText = reader.readSimpleElementText(currentEvent)
-                datum = runCatching { OffsetDateTime.parse(datumText) }
-                    .recoverCatching { LocalDateTime.parse(datumText).atOffset(ZoneOffset.UTC) }
-                    .getOrThrow()
+                datum = XsdDateTimeUnion.fromString(datumText)
+
 
             } // consume and discard
         }

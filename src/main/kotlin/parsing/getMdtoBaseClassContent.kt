@@ -1,6 +1,6 @@
 package nl.joozd.parsing
 
-import nl.joozd.mdto.objects.MdtoBaseClassContent
+import nl.joozd.mdto.objects.MdtoContent
 import nl.joozd.utils.isEndEventFor
 import nl.joozd.utils.requireNextTagAsEndElement
 import nl.joozd.utils.requireNextTagAsStartElement
@@ -19,13 +19,13 @@ private const val BESTAND_TAG = "bestand"
 internal fun getMdtoBaseClassContent(
     reader: XMLEventReader,
     startEvent: StartElement,
-): MdtoBaseClassContent {
+): MdtoContent {
 
     val startEventName = startEvent.name
 
     val childStart = reader.requireNextTagAsStartElement()
 
-    val result: MdtoBaseClassContent = when (childStart.name.localPart) {
+    val result: MdtoContent = when (childStart.name.localPart) {
 
         INFORMATIEOBJECT_TAG ->
             getInformatieobject(reader, childStart) // returns Informatieobject

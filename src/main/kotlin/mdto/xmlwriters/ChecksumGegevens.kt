@@ -1,7 +1,7 @@
 package nl.joozd.mdto.xmlwriters
 
 import nl.joozd.mdto.objects.ChecksumGegevens
-import java.time.format.DateTimeFormatter
+import nl.joozd.mdto.types.toXmlString
 import javax.xml.stream.XMLStreamWriter
 
 fun ChecksumGegevens.emit(name: String, writer: XMLStreamWriter) {
@@ -12,7 +12,7 @@ fun ChecksumGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.element("checksumWaarde",checksumWaarde)
 
     writer.element("checksumDatum",
-        checksumDatum.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+        checksumDatum.toXmlString()
     )
 
     writer.writeEndElement()

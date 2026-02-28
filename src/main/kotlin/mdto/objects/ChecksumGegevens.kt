@@ -1,6 +1,6 @@
 package nl.joozd.mdto.objects
 
-import java.time.OffsetDateTime
+import nl.joozd.mdto.types.XsdDateTimeUnion
 
 /**
  * @property checksumAlgoritme Naam van het checksum algoritme dat is gebruikt om de checksum te maken.
@@ -10,5 +10,5 @@ import java.time.OffsetDateTime
 data class ChecksumGegevens(
     val checksumAlgoritme: BegripGegevens,
     val checksumWaarde: String,
-    val checksumDatum: OffsetDateTime
+    val checksumDatum: XsdDateTimeUnion
 ): MDTONode

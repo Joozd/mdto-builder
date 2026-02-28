@@ -21,7 +21,7 @@ data class Bestand(
     val checksum: List<ChecksumGegevens>,
     val urlBestand: URI? = null,
     val isRepresentatieVan: VerwijzingGegevens
-) : MdtoBaseClassContent {
+) : MdtoContent {
 
     init {
         require(identificatie.isNotEmpty()) {

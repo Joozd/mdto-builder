@@ -1,6 +1,9 @@
+import nl.joozd.mdto.extensions.xmlString
+import nl.joozd.mdto.objects.MDTORoot
 import nl.joozd.parseMdto
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
+import kotlin.io.path.readText
 import kotlin.test.assertEquals
 
 class ParsingTest {
@@ -8,15 +11,37 @@ class ParsingTest {
     private val testInformatieobject = Paths.get(this::class.java.getResource("test_informatieobject.xml")?.toURI() ?: error ("Could not get test_informatieobject.xml from resources"))
     @Test
     fun `test bestand parsing`(){
-        val rootBestand = parseMdto(testBestand)
-        val expectedString = """MDTORoot(content=Bestand(identificatie=[IdentificatieGegevens(identificatieKenmerk=50295847, identificatieBron=Proza)], naam=DC-2015_1753-1.PDF, omvang=57727859, bestandsformaat=BegripGegevens(begripLabel=Acrobat PDF 1.3 - Portable Document Format, begripCode=fmt/17, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=PRONOM-register, verwijzingIdentificatie=null)), checksum=[ChecksumGegevens(checksumAlgoritme=BegripGegevens(begripLabel=SHA256, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst ChecksumAlgoritme MDTO, verwijzingIdentificatie=null)), checksumWaarde=86f16c3359c2e59538a3df178a9530dd6278faec82e66d605b3bc2a64ac390fc, checksumDatum=2025-02-18T15:24:18Z)], urlBestand=https://www.nationaalarchief.nl/onderzoeken/archief/2.16.133/invnr/DC-2015%7C%7C1753/file/DC-2015_1753-1.PDF, isRepresentatieVan=VerwijzingGegevens(verwijzingNaam=Atelier Kustkwaliteit, 2011. Ontwerpstudie Dwarsdoorsneden kust, vier Kustdoorsneden in beeld, Werkboek 2, Delft., verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=DC-2015/1753, identificatieBron=Archief Deltacommissaris))))"""
+        val rootBestand = MDTORoot(parseMdto(testBestand))
+        val expectedString = """MDTORoot(content=Bestand(identificatie=[IdentificatieGegevens(identificatieKenmerk=50295847, identificatieBron=Proza)], naam=DC-2015_1753-1.PDF, omvang=57727859, bestandsformaat=BegripGegevens(begripLabel=Acrobat PDF 1.3 - Portable Document Format, begripCode=fmt/17, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=PRONOM-register, verwijzingIdentificatie=null)), checksum=[ChecksumGegevens(checksumAlgoritme=BegripGegevens(begripLabel=SHA256, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst ChecksumAlgoritme MDTO, verwijzingIdentificatie=null)), checksumWaarde=86f16c3359c2e59538a3df178a9530dd6278faec82e66d605b3bc2a64ac390fc, checksumDatum=DateTime(dateTime=2025-02-18T15:24:18))], urlBestand=https://www.nationaalarchief.nl/onderzoeken/archief/2.16.133/invnr/DC-2015%7C%7C1753/file/DC-2015_1753-1.PDF, isRepresentatieVan=VerwijzingGegevens(verwijzingNaam=Atelier Kustkwaliteit, 2011. Ontwerpstudie Dwarsdoorsneden kust, vier Kustdoorsneden in beeld, Werkboek 2, Delft., verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=DC-2015/1753, identificatieBron=Archief Deltacommissaris))))"""
         assertEquals(expectedString, rootBestand.toString())
     }
 
     @Test
     fun `test informatieobject parsing`(){
-        val rootBestand = parseMdto(testInformatieobject)
+        val rootBestand = MDTORoot(parseMdto(testInformatieobject))
         val expectedString = """MDTORoot(content=Informatieobject(identificatie=[IdentificatieGegevens(identificatieKenmerk=DC-2015/1753, identificatieBron=Archief Deltacommissaris)], naam=Atelier Kustkwaliteit, 2011. Ontwerpstudie Dwarsdoorsneden kust, vier Kustdoorsneden in beeld, Werkboek 2, Delft., aggregatieniveau=BegripGegevens(begripLabel=Archiefstuk, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst Aggregatieniveaus MDTO, verwijzingIdentificatie=null)), classificatie=[BegripGegevens(begripLabel=Studie, begripCode=2.1., begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Ministerie IenW zaaksysteem begrippenlijst, verwijzingIdentificatie=null))], trefwoord=[], omschrijving=[], raadpleeglocatie=[RaadpleeglocatieGegevens(raadpleeglocatieFysiek=[], raadpleeglocatieOnline=[https://www.nationaalarchief.nl/onderzoeken/archief/2.16.133/invnr/DC-2015%7C%7C1753/file/DC-2015_1753-1.PDF]), RaadpleeglocatieGegevens(raadpleeglocatieFysiek=[VerwijzingGegevens(verwijzingNaam=Nationaal Archief Den Haag, verwijzingIdentificatie=null)], raadpleeglocatieOnline=[])], dekkingInTijd=[], dekkingInRuimte=[VerwijzingGegevens(verwijzingNaam=Noordzeekust, verwijzingIdentificatie=null)], taal=[nl], event=[EventGegevens(eventType=BegripGegevens(begripLabel=Creatie, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst EventTypeLijst MDTO, verwijzingIdentificatie=null)), eventTijd=LocalDateTime(value=2011-07-21T13:20), eventVerantwoordelijkeActor=VerwijzingGegevens(verwijzingNaam=Beleidsmedewerker programma Deltacommissaris, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=WH2360HHHJ, identificatieBron=ZZ-TRIMADDIN)), eventResultaat=null), EventGegevens(eventType=BegripGegevens(begripLabel=Bevriezing, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst EventTypeLijst MDTO, verwijzingIdentificatie=null)), eventTijd=LocalDateTime(value=2011-11-05T09:40), eventVerantwoordelijkeActor=VerwijzingGegevens(verwijzingNaam=Medewerker informatiebeheer, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=WH2360HHKJ, identificatieBron=ZZ-TRIMADDIN)), eventResultaat=null), EventGegevens(eventType=BegripGegevens(begripLabel=Migratie, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst EventTypeLijst MDTO, verwijzingIdentificatie=null)), eventTijd=LocalDateTime(value=2020-01-12T23:20), eventVerantwoordelijkeActor=VerwijzingGegevens(verwijzingNaam=Medewerker informatiebeheer, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=WH2360HHKJ, identificatieBron=ZZ-TRIMADDIN)), eventResultaat=null)], waardering=BegripGegevens(begripLabel=Tijdelijk te bewaren, begripCode=V, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst Waarderingen MDTO, verwijzingIdentificatie=null)), bewaartermijn=TermijnGegevens(termijnTriggerStartLooptijd=BegripGegevens(begripLabel=Bevriezing, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Begrippenlijst EventTypeLijst MDTO, verwijzingIdentificatie=null)), termijnStartdatumLooptijd=2011-11-05, termijnLooptijd=P75Y, termijnEinddatum=FullDate(value=2086-11-05)), informatiecategorie=BegripGegevens(begripLabel=Primair beleid, begripCode=2.1.1, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Selectielijst ministerie van Infrastructuur en Milieu, verwijzingIdentificatie=null)), isOnderdeelVan=[VerwijzingGegevens(verwijzingNaam=Brondocumenten en literatuur bij synthesedocument voorkeursstrategie Kust en strategische beslissing Zand, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=DC/358, identificatieBron=Archief Deltacommissaris))], bevatOnderdeel=[], heeftRepresentatie=[VerwijzingGegevens(verwijzingNaam=DC-2015_1753-1.PDF, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=50295847, identificatieBron=Proza))], aanvullendeMetagegevens=[VerwijzingGegevens(verwijzingNaam=RGBZ metadata.xml, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=50295859, identificatieBron=Proza))], gerelateerdInformatieobject=[], archiefvormer=[VerwijzingGegevens(verwijzingNaam=Ministerie van Infrastructuur en Waterstaat, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=https://organisaties.overheid.nl/112773/Infrastructuur_en_Waterstaat, identificatieBron=Register van Overheidsorganisaties))], betrokkene=[BetrokkeneGegevens(betrokkeneTypeRelatie=BegripGegevens(begripLabel=Aanvrager, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Ministerie IenW zaaksysteem begrippenlijst, verwijzingIdentificatie=null)), betrokkeneActor=VerwijzingGegevens(verwijzingNaam=Café ’t Hoekje, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=20404451, identificatieBron=KVK)))], activiteit=VerwijzingGegevens(verwijzingNaam=Behandelen vergunningsaanvragen, verwijzingIdentificatie=IdentificatieGegevens(identificatieKenmerk=821002193-20201, identificatieBron=GEMTE)), beperkingGebruik=[BeperkingGebruikGegevens(beperkingGebruikType=BegripGegevens(begripLabel=CC0, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Ministerie IenW zaaksysteem begrippenlijst, verwijzingIdentificatie=null)), beperkingGebruikNadereBeschrijving=CC0 Publiek domein, beperkingGebruikDocumentatie=[], beperkingGebruikTermijn=TermijnGegevens(termijnTriggerStartLooptijd=BegripGegevens(begripLabel=Sluiting dossier, begripCode=null, begripBegrippenlijst=VerwijzingGegevens(verwijzingNaam=Ministerie IenW zaaksysteem begrippenlijst, verwijzingIdentificatie=null)), termijnStartdatumLooptijd=null, termijnLooptijd=P70Y, termijnEinddatum=FullDate(value=2085-04-05)))]))"""
         assertEquals(expectedString, rootBestand.toString())
     }
+
+    @Test
+    fun `test parsing XML Bestand to model and then model to XML ends up the same`(){
+        val xmlString = testBestand.readText()
+        val textStringAsInputStream = xmlString.byteInputStream()
+        val parsed = parseMdto(inputStream = textStringAsInputStream).xmlString()
+        assertEquals(xmlString.stripIndents(), parsed.stripIndents())
+    }
+
+    @Test
+    fun `test parsing XML Informatieobject to model and then model to XML ends up the same`(){
+        val xmlString = testInformatieobject.readText()
+        val textStringAsInputStream = xmlString.byteInputStream()
+        val parsed = parseMdto(inputStream = textStringAsInputStream).xmlString()
+        assertEquals(xmlString.stripIndents(), parsed.stripIndents())
+    }
 }
+
+/**
+ * Gets rid of newline and indentation inequalities
+ */
+private fun String.stripIndents() =
+    lines().joinToString("\n") { it.trim()}

@@ -54,7 +54,7 @@ data class Informatieobject(
 
     val activiteit: VerwijzingGegevens? = null,
     val beperkingGebruik: List<BeperkingGebruikGegevens>,
-) : MdtoBaseClassContent{
+) : MdtoContent{
     init {
         require(identificatie.isNotEmpty()) {
             "Informatieobject moet minimaal één identificatie bevatten."
