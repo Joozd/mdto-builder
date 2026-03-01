@@ -12,7 +12,7 @@ fun maakBestandsFormaat(sources: Sources, errorLogger: ErrorLogger): BegripGegev
     val label = sources.fileIdentification.mimeType ?:
         errorLogger.add("maakBestandsFormaat", "Kan geen bestandsformaat maken van (${sources.fileIdentification.naam}) - waarschijnlijk is dit een directory en geen bestand.")
 
-    return BegripGegevens(label, begripBegrippenlijst = begrippenLijst)
+    return BegripGegevens(label, begrippenlijst = begrippenLijst)
 }
 
 

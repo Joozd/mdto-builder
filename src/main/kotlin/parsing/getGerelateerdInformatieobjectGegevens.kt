@@ -63,7 +63,7 @@ internal fun getGerelateerdInformatieobjectGegevens(
     }
 
     return GerelateerdInformatieobjectGegevens(
-        gerelateerdInformatieobjectVerwijzing = gerelateerdInformatieobjectVerwijzing,
-        gerelateerdInformatieobjectTypeRelatie = gerelateerdInformatieobjectTypeRelatie,
+        verwijzing = gerelateerdInformatieobjectVerwijzing,
+        typeRelatie = gerelateerdInformatieobjectTypeRelatie,
     )
 }

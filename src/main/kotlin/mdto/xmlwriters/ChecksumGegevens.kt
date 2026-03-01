@@ -7,12 +7,12 @@ import javax.xml.stream.XMLStreamWriter
 fun ChecksumGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
 
-    checksumAlgoritme.emit("checksumAlgoritme", writer)
+    algoritme.emit("checksumAlgoritme", writer)
 
-    writer.element("checksumWaarde",checksumWaarde)
+    writer.element("checksumWaarde",waarde)
 
     writer.element("checksumDatum",
-        checksumDatum.toXmlString()
+        datum.toXmlString()
     )
 
     writer.writeEndElement()

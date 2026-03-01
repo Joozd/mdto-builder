@@ -72,9 +72,9 @@ internal fun getTermijnGegevens(
     }
 
     return TermijnGegevens(
-        termijnTriggerStartLooptijd = termijnTriggerStartLooptijd,
-        termijnStartdatumLooptijd = termijnStartdatumLooptijd,
-        termijnLooptijd = termijnLooptijd,
-        termijnEinddatum = termijnEinddatum,
+        triggerStartLooptijd = termijnTriggerStartLooptijd,
+        startdatumLooptijd = termijnStartdatumLooptijd,
+        looptijd = termijnLooptijd,
+        einddatum = termijnEinddatum,
     )
 }

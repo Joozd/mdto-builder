@@ -7,9 +7,9 @@ import javax.xml.stream.XMLStreamWriter
 
 fun TermijnGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
-    termijnTriggerStartLooptijd?.emit("termijnTriggerStartLooptijd", writer)
-    writer.element("termijnStartdatumLooptijd",termijnStartdatumLooptijd?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-    writer.element("termijnLooptijd", termijnLooptijd?.toString())
-    writer.element("termijnEinddatum",termijnEinddatum?.toXmlString())
+    triggerStartLooptijd?.emit("termijnTriggerStartLooptijd", writer)
+    writer.element("termijnStartdatumLooptijd",startdatumLooptijd?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+    writer.element("termijnLooptijd", looptijd?.toString())
+    writer.element("termijnEinddatum",einddatum?.toXmlString())
     writer.writeEndElement()
 }

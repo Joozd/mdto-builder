@@ -7,10 +7,10 @@ import javax.xml.stream.XMLStreamWriter
 fun EventGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
 
-    eventType.emit("eventType", writer)
-    writer.element("eventTijd",eventTijd?.toXmlString())
-    eventVerantwoordelijkeActor?.emit("eventVerantwoordelijkeActor", writer)
-    writer.element("eventResultaat",eventResultaat)
+    type.emit("eventType", writer)
+    writer.element("eventTijd",tijd?.toXmlString())
+    verantwoordelijkeActor?.emit("eventVerantwoordelijkeActor", writer)
+    writer.element("eventResultaat",resultaat)
 
     writer.writeEndElement()
 }

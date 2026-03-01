@@ -70,8 +70,8 @@ internal fun getDekkingInTijdGegevens(
     }
 
     return DekkingInTijdGegevens(
-        dekkingInTijdType = dekkingInTijdType,
-        dekkingInTijdBegindatum = dekkingInTijdBegindatum,
-        dekkingInTijdEinddatum = dekkingInTijdEinddatum,
+        type = dekkingInTijdType,
+        begindatum = dekkingInTijdBegindatum,
+        einddatum = dekkingInTijdEinddatum,
     )
 }

@@ -59,7 +59,7 @@ internal fun getBetrokkeneGegevens(
     }
 
     return BetrokkeneGegevens(
-        betrokkeneTypeRelatie = betrokkeneTypeRelatie,
-        betrokkeneActor = betrokkeneActor,
+        typeRelatie = betrokkeneTypeRelatie,
+        actor = betrokkeneActor,
     )
 }

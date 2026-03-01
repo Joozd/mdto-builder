@@ -15,22 +15,22 @@ private const val BEGRIPPENLIJST = "Begrippenlijst EventTypeLijst MDTO"
 
 fun assembleDigitaliseringEventGegevens(sources: Sources, errorLogger: ErrorLogger): EventGegevens{
     val moment = sources.fileIdentification.lastModified
-    val begrip = BegripGegevens(DIGITALISERING, begripBegrippenlijst = VerwijzingGegevens(BEGRIPPENLIJST))
+    val begrip = BegripGegevens(DIGITALISERING, begrippenlijst = VerwijzingGegevens(BEGRIPPENLIJST))
     val resultaat = "Bestanden gedigitaliseerd"
 
-    return EventGegevens(eventType = begrip, eventTijd = XsdDateOrDateTimeUnion.DateTime(moment))
+    return EventGegevens(type = begrip, tijd = XsdDateOrDateTimeUnion.DateTime(moment))
 }
 
 fun assembleImportEventGegevens(sources: Sources, errorLogger: ErrorLogger): EventGegevens{
     val moment = OffsetDateTime.now()
-    val begrip = BegripGegevens(UITPLAATSING, begripBegrippenlijst = VerwijzingGegevens(BEGRIPPENLIJST))
-    val actor = VerwijzingGegevens("Marije Welle", verwijzingIdentificatie = IdentificatieGegevens("1234567", "Gemeente Den Haag Medewerkersnummers (fictief)"))
+    val begrip = BegripGegevens(UITPLAATSING, begrippenlijst = VerwijzingGegevens(BEGRIPPENLIJST))
+    val actor = VerwijzingGegevens("Marije Welle", identificatie = IdentificatieGegevens("1234567", "Gemeente Den Haag Medewerkersnummers (fictief)"))
     val resultaat = "Bestanden overgezet naar testomgeving. Niet voor permanente bewaring!"
 
     return EventGegevens(
-        eventType = begrip,
-        eventTijd = XsdDateOrDateTimeUnion.DateTime(moment),
-        eventVerantwoordelijkeActor = actor,
-        eventResultaat = resultaat
+        type = begrip,
+        tijd = XsdDateOrDateTimeUnion.DateTime(moment),
+        verantwoordelijkeActor = actor,
+        resultaat = resultaat
     )
 }

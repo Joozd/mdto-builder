@@ -17,13 +17,13 @@ fun assembleInformatieObject(sources: Sources, errorLogger: ErrorLogger): Inform
     val identificatie = assembleIdentificatieGegevensUitBestandsNaam(sources, errorLogger)
     val naam = sources.fileIdentification.naam
 
-    val aggregatieniveau = BegripGegevens(AGGREGATIE_NIVEAU_LABEL, begripBegrippenlijst = VerwijzingGegevens(AGGREGATIE_NIVEAU_LIJST))
+    val aggregatieniveau = BegripGegevens(AGGREGATIE_NIVEAU_LABEL, begrippenlijst = VerwijzingGegevens(AGGREGATIE_NIVEAU_LIJST))
     val raadpleeglocatie = listOf(assembleRaadpleeglocatieGegevens(sources, errorLogger))
     val event = listOf(
         assembleDigitaliseringEventGegevens(sources, errorLogger),
         assembleImportEventGegevens(sources, errorLogger)
     )
-    val waardering = BegripGegevens("Tijdelijk te bewaren", "V", begripBegrippenlijst = VerwijzingGegevens("Begrippenlijst Waarderingen MDTO"))
+    val waardering = BegripGegevens("Tijdelijk te bewaren", "V", begrippenlijst = VerwijzingGegevens("Begrippenlijst Waarderingen MDTO"))
 
     val isOnderdeelVan = sources.fileIdentification.isOnderdeelVan.map { VerwijzingGegevens(it) }
 

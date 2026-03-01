@@ -7,10 +7,10 @@ import javax.xml.stream.XMLStreamWriter
 fun DekkingInTijdGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
 
-    dekkingInTijdType.emit("dekkingInTijdType", writer)
+    type.emit("dekkingInTijdType", writer)
 
-    writer.element("dekkingInTijdBegindatum",dekkingInTijdBegindatum.toXmlString())
-    writer.element("dekkingInTijdEinddatum",dekkingInTijdEinddatum?.toXmlString())
+    writer.element("dekkingInTijdBegindatum",begindatum.toXmlString())
+    writer.element("dekkingInTijdEinddatum",einddatum?.toXmlString())
 
     writer.writeEndElement()
 }

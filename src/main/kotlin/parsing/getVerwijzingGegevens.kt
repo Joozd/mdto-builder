@@ -72,7 +72,7 @@ internal fun getVerwijzingGegevens(
     }
 
     return VerwijzingGegevens(
-        verwijzingNaam = naam,
-        verwijzingIdentificatie = identificatie
+        naam = naam,
+        identificatie = identificatie
     )
 }

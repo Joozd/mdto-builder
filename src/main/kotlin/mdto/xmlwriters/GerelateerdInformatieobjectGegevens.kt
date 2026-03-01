@@ -9,10 +9,10 @@ fun GerelateerdInformatieobjectGegevens.emit(
 ) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
 
-    gerelateerdInformatieobjectVerwijzing
+    verwijzing
         .emit("gerelateerdInformatieobjectVerwijzing", writer)
 
-    gerelateerdInformatieobjectTypeRelatie
+    typeRelatie
         .emit("gerelateerdInformatieobjectTypeRelatie", writer)
 
     writer.writeEndElement()

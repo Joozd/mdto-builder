@@ -49,7 +49,7 @@ fun getRaadpleeglocatieGegevens(
     }
 
     return RaadpleeglocatieGegevens(
-        raadpleeglocatieFysiek = raadpleeglocatieFysiek,
-        raadpleeglocatieOnline = raadpleeglocatieOnline,
+        fysiek = raadpleeglocatieFysiek,
+        online = raadpleeglocatieOnline,
     )
 }

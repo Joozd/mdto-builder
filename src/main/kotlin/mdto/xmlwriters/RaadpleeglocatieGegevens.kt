@@ -6,11 +6,11 @@ import javax.xml.stream.XMLStreamWriter
 fun RaadpleeglocatieGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
 
-    for (fysiek in raadpleeglocatieFysiek) {
+    for (fysiek in fysiek) {
         fysiek.emit("raadpleeglocatieFysiek", writer)
     }
 
-    for (online in raadpleeglocatieOnline) {
+    for (online in online) {
         writer.element("raadpleeglocatieOnline", online.toString())
     }
 

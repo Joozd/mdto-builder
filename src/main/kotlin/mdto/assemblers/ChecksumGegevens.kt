@@ -13,7 +13,7 @@ fun sha256Checksum(sources: Sources, errorLogger: ErrorLogger): ChecksumGegevens
     val verwijzingNaam = "Begrippenlijst ChecksumAlgoritme MDTO"
     val checksum = sources.fileIdentification.checksumSHA256 ?: errorLogger.add("sha256Checksum", "Kan geen checksum berekenen voor ${sources.fileIdentification.naam}. Waarschijnlijk is dit een directory.")
 
-    val algoritme = BegripGegevens(begripLabel = algoritmeLabel, begripBegrippenlijst = VerwijzingGegevens(verwijzingNaam))
+    val algoritme = BegripGegevens(label = algoritmeLabel, begrippenlijst = VerwijzingGegevens(verwijzingNaam))
     val dateTime = XsdDateTimeUnion.DateTimeOffset(OffsetDateTime.now())
 
     return ChecksumGegevens(algoritme, checksum, dateTime)

@@ -9,7 +9,7 @@ import nl.joozd.utils.ErrorLogger
 fun assembleBeperkingGebruikGegevens(sources: Sources, errorLogger: ErrorLogger): BeperkingGebruikGegevens {
     val label = "Nader te bepalen"
     val bron = "https://www.nationaalarchief.nl/archiveren/mdto/begrippenlijst-metagegevensschema#collapse-102684"
-    val type = BegripGegevens(label, begripBegrippenlijst = VerwijzingGegevens(bron))
+    val type = BegripGegevens(label, begrippenlijst = VerwijzingGegevens(bron))
 
     return BeperkingGebruikGegevens(type)
 }

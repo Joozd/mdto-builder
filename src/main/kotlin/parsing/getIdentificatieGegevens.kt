@@ -71,7 +71,7 @@ internal fun getIdentificatieGegevens(
     }
 
     return IdentificatieGegevens(
-        identificatieKenmerk = kenmerk,
-        identificatieBron = bron
+        kenmerk = kenmerk,
+        bron = bron
     )
 }

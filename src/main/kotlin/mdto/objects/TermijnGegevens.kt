@@ -8,8 +8,8 @@ import java.time.LocalDate
  * Gegevens over de bewaartermijn van een informatieobject.
  */
 data class TermijnGegevens(
-    val termijnTriggerStartLooptijd: BegripGegevens? = null,
-    val termijnStartdatumLooptijd: LocalDate? = null,
-    val termijnLooptijd: XsdDuration? = null,
-    val termijnEinddatum: XsdDateUnion? = null,
+    val triggerStartLooptijd: BegripGegevens? = null,
+    val startdatumLooptijd: LocalDate? = null,
+    val looptijd: XsdDuration? = null,
+    val einddatum: XsdDateUnion? = null,
 ) : MDTONode

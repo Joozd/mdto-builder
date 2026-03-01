@@ -4,6 +4,6 @@ package nl.joozd.mdto.objects
  * Relatie met een ander informatieobject.
  */
 data class GerelateerdInformatieobjectGegevens(
-    val gerelateerdInformatieobjectVerwijzing: VerwijzingGegevens,
-    val gerelateerdInformatieobjectTypeRelatie: BegripGegevens,
+    val verwijzing: VerwijzingGegevens,
+    val typeRelatie: BegripGegevens,
 ) : MDTONode

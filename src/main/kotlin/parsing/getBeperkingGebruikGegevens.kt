@@ -77,9 +77,9 @@ internal fun getBeperkingGebruikGegevens(
     }
 
     return BeperkingGebruikGegevens(
-        beperkingGebruikType = beperkingGebruikType,
-        beperkingGebruikNadereBeschrijving = beperkingGebruikNadereBeschrijving,
-        beperkingGebruikDocumentatie = beperkingGebruikDocumentatie,
-        beperkingGebruikTermijn = beperkingGebruikTermijn,
+        type = beperkingGebruikType,
+        nadereBeschrijving = beperkingGebruikNadereBeschrijving,
+        documentatie = beperkingGebruikDocumentatie,
+        termijn = beperkingGebruikTermijn,
     )
 }

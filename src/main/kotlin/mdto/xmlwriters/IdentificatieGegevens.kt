@@ -9,9 +9,9 @@ import javax.xml.stream.XMLStreamWriter
 internal fun IdentificatieGegevens.emit(name: String, writer: XMLStreamWriter) {
     writer.writeStartElement(MDTOXmlConstants.NS, name)
 
-    writer.element( "identificatieKenmerk",identificatieKenmerk)
+    writer.element( "identificatieKenmerk",kenmerk)
 
-    writer.element("identificatieBron",identificatieBron)
+    writer.element("identificatieBron",bron)
 
     writer.writeEndElement()
 }

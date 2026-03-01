@@ -79,8 +79,8 @@ internal fun getChecksumGegevens(
     }
 
     return ChecksumGegevens(
-        checksumAlgoritme = algoritme,
-        checksumWaarde = waarde,
-        checksumDatum = datum,
+        algoritme = algoritme,
+        waarde = waarde,
+        datum = datum,
     )
 }

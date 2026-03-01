@@ -75,9 +75,9 @@ internal fun getEventGegevens(
     }
 
     return EventGegevens(
-        eventType = eventType,
-        eventTijd = eventTijd,
-        eventVerantwoordelijkeActor = eventVerantwoordelijkeActor,
-        eventResultaat = eventResultaat,
+        type = eventType,
+        tijd = eventTijd,
+        verantwoordelijkeActor = eventVerantwoordelijkeActor,
+        resultaat = eventResultaat,
     )
 }
