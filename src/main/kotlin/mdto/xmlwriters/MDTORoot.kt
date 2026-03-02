@@ -38,5 +38,5 @@ internal fun MDTORoot.emit(writer: XMLStreamWriter, skipStart: Boolean = false) 
     }
 
     writer.writeEndElement()
-    writer.writeEndDocument()
+    if(!skipStart) writer.writeEndDocument()
 }

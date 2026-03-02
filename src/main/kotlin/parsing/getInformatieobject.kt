@@ -50,7 +50,6 @@ internal fun getInformatieobject(
     var currentEvent: XMLEvent = startEvent
 
     while (reader.hasNext() && !currentEvent.isEndEventFor(startEventName)) {
-        println("currentEvent: $currentEvent")
         val nextEvent = reader.nextTag()
         if(nextEvent.isEndElement) {
             currentEvent = nextEvent
