@@ -5,8 +5,8 @@ import nl.joozd.mdto.objects.Informatieobject
 import nl.joozd.mdto.objects.MDTORoot
 import javax.xml.stream.XMLStreamWriter
 
-internal fun MDTORoot.emit(writer: XMLStreamWriter) {
-    writer.writeStartDocument("UTF-8", "1.0")
+internal fun MDTORoot.emit(writer: XMLStreamWriter, skipStart: Boolean = false) {
+    if(!skipStart) writer.writeStartDocument("UTF-8", "1.0")
 
     // Default namespace instellen
     writer.setDefaultNamespace(MDTOXmlConstants.NS)

@@ -9,7 +9,7 @@ import javax.xml.stream.XMLStreamWriter
  * Outputs the content of this object to [writer]
  * This can be used when the MDTO XML needs to be embedded into another XML stream, for example into an OPEX file.
  */
-fun MdtoContent.outputToWriter(writer: XMLStreamWriter){
+fun MdtoContent.outputToWriter(writer: XMLStreamWriter, includeStartElement: Boolean = false){
     val root = MDTORoot(this)
-    root.emit(writer)
+    root.emit(writer, skipStart = !includeStartElement)
 }
