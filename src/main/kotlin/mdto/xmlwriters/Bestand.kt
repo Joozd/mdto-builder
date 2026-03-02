@@ -20,7 +20,7 @@ fun Bestand.emit(name: String, writer: XMLStreamWriter) {
     // bestandsformaat (verplicht)
     bestandsformaat.emit("bestandsformaat", writer)
 
-    // checksum (1..n)
+    // checksum (1..n)ú
     for (cs in checksum) {
         cs.emit("checksum", writer)
     }

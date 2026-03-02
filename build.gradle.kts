@@ -8,7 +8,7 @@ plugins {
     // id("org.jetbrains.dokka-javadoc") version "2.0.0"
 }
 
-val versionName = "0.2.1-alpa prerelease"
+val versionName = "0.3.2-alpha prerelease"
 val groupID = "nl.joozd"
 val artifactID = "mdtobuilder"
 
