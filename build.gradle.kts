@@ -8,7 +8,7 @@ plugins {
     // id("org.jetbrains.dokka-javadoc") version "2.0.0"
 }
 
-val versionName = "0.3.5-alpha prerelease"
+val versionName = "0.3.5-alpha.1"
 val groupID = "nl.joozd"
 val artifactID = "mdtobuilder"
 
@@ -24,6 +24,7 @@ dependencies {
     implementation("org.glassfish.jaxb:jaxb-runtime:4.0.5")
     implementation("org.apache.tika:tika-core:3.2.2")
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.3")
+
     testImplementation(kotlin("test"))
 }
 
@@ -36,17 +37,17 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    // only if you need it; remove otherwise
     // compilerOptions.freeCompilerArgs.add("-Xcontext-parameters")
 }
 
-/** Sources jar */
+/**
+ * Packages the project sources.
+ */
 val sourceJar by tasks.registering(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets.named("main").map { it.allSource })
 }
 
-/** Dokka v2 */
 dokka {
     moduleName.set("MDTOBuilder")
 
@@ -54,15 +55,11 @@ dokka {
         outputDirectory.set(layout.buildDirectory.dir("docs"))
     }
 
-    // Only if dokka-javadoc plugin applied
     dokkaPublications.findByName("javadoc")?.apply {
         outputDirectory.set(layout.buildDirectory.dir("javadoc"))
     }
 
     dokkaSourceSets.main {
-        // Optional
-        // includes.from("README.md")
-
         jdkVersion.set(17)
 
         sourceLink {
@@ -70,21 +67,23 @@ dokka {
             remoteUrl("https://github.com/Joozd/mdtobuilder/tree/master/src/main/kotlin")
             remoteLineSuffix.set("#L")
         }
-
-        // Optional: make docs stricter
-        // reportUndocumented.set(true)
     }
 }
 
-/** Package Dokka outputs as jars (v2) */
 val dokkaGenerate = tasks.named("dokkaGenerate")
 
+/**
+ * Packages the generated Dokka HTML documentation.
+ */
 val dokkaHtmlJar by tasks.registering(Jar::class) {
     dependsOn(dokkaGenerate)
     archiveClassifier.set("html-docs")
     from(layout.buildDirectory.dir("docs"))
 }
 
+/**
+ * Packages the generated Javadoc-style Dokka documentation.
+ */
 val dokkaJavadocJar by tasks.registering(Jar::class) {
     dependsOn(dokkaGenerate)
     archiveClassifier.set("javadoc")
@@ -102,6 +101,7 @@ publishing {
 
             artifact(sourceJar.get())
             artifact(dokkaHtmlJar.get())
+
             if (plugins.hasPlugin("org.jetbrains.dokka-javadoc")) {
                 artifact(dokkaJavadocJar.get())
             }
@@ -110,9 +110,10 @@ publishing {
                 name.set("MDTOBuilder")
                 description.set("MDTO parsing and generation library (StAX-based).")
                 url.set("https://github.com/Joozd/mdtobuilder")
+
                 licenses {
                     license {
-                        name.set("Apache License 2.0") // adjust if needed
+                        name.set("Apache License 2.0")
                         url.set("https://www.apache.org/licenses/LICENSE-2.0")
                         distribution.set("repo")
                     }
@@ -123,10 +124,24 @@ publishing {
 
     repositories {
         maven {
-            url = uri("https://joozd.nl/nexus/repository/maven-releases/")
+            val isSnapshot = version.toString().endsWith("-SNAPSHOT")
+
+            name = "reposilite"
+
+            url = uri(
+                if (isSnapshot) {
+                    "https://repo.joozd.nl/snapshots"
+                } else {
+                    "https://repo.joozd.nl/releases"
+                }
+            )
+
             credentials {
-                username = (findProperty("nexusUsername") ?: System.getenv("NEXUS_USERNAME") ?: "").toString()
-                password = (findProperty("nexusPassword") ?: System.getenv("NEXUS_PASSWORD") ?: "").toString()
+                username = findProperty("repoUsername")?.toString()
+                    ?: error("Missing Gradle property: repoUsername")
+
+                password = findProperty("repoPassword")?.toString()
+                    ?: error("Missing Gradle property: repoPassword")
             }
         }
     }
